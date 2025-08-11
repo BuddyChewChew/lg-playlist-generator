@@ -8,19 +8,17 @@ from datetime import datetime, timedelta, timezone
 import xml.etree.ElementTree as ET
 import logging
 import time
-import re
 import sys
-import math
-from urllib.parse import urljoin
 
 # --- Configuration ---
-BASE_URL = "https://api.lgchannels.com"
+BASE_URL = "https://us.lgchannels.com"
+API_BASE_URL = f"{BASE_URL}/api/v1"
 DEFAULT_HEADERS = {
     'Accept': 'application/json, text/plain, */*',
     'Accept-Encoding': 'gzip, deflate, br, zstd',
     'Accept-Language': 'en-US,en;q=0.5',
     'Connection': 'keep-alive',
-    'Host': 'api.lgchannels.com',
+    'Host': 'us.lgchannels.com',
     'Origin': 'https://lgchannels.com',
     'Referer': 'https://lgchannels.com/',
     'Sec-Fetch-Dest': 'empty',
@@ -34,7 +32,7 @@ OUTPUT_DIR = "lgchannels_playlist"
 PLAYLIST_FILENAME = "lgchannels.m3u"
 EPG_FILENAME = "lgchannels_epg.xml.gz"
 REQUEST_TIMEOUT = 30
-EPG_DAYS = 3  # Number of days of EPG data to fetch
+EPG_HOURS = 24  # Number of hours of EPG data to fetch
 
 # --- Logging Setup ---
 logging.basicConfig(
@@ -72,15 +70,19 @@ def fetch_data(url, params=None, headers=None, retries=2):
         except requests.exceptions.RequestException as e:
             if attempt == retries:
                 logging.error(f"Failed to fetch {url} after {retries + 1} attempts: {e}")
+                if hasattr(e, 'response') and e.response is not None:
+                    logging.error(f"Response content: {e.response.text[:500]}")
                 return None
-            time.sleep(1 * (attempt + 1))  # Exponential backoff
+            time.sleep(1 * (attempt + 1))
     return None
 
 def get_channels():
     """Fetch the list of channels from LG Channels API."""
     logging.info("Fetching channel list...")
-    url = f"{BASE_URL}/v1/channels"
-    data = fetch_data(url)
+    
+    # First, get the channel lineup
+    lineup_url = f"{API_BASE_URL}/lineup"
+    data = fetch_data(lineup_url)
     
     if not data or 'channels' not in data:
         logging.error("Failed to fetch or parse channel list")
@@ -90,7 +92,7 @@ def get_channels():
     for channel in data['channels']:
         try:
             channel_info = {
-                'id': channel.get('id'),
+                'id': channel.get('channelId'),
                 'name': channel.get('name', 'Unknown'),
                 'number': channel.get('channelNumber', '0'),
                 'logo': channel.get('logoUrl', ''),
@@ -98,26 +100,36 @@ def get_channels():
                 'description': channel.get('description', ''),
                 'categories': channel.get('categories', [])
             }
+            
+            # If stream URL is relative, make it absolute
+            if channel_info['stream_url'] and not channel_info['stream_url'].startswith('http'):
+                channel_info['stream_url'] = f"{BASE_URL}{channel_info['stream_url']}"
+                
+            # If logo URL is relative, make it absolute
+            if channel_info['logo'] and not channel_info['logo'].startswith('http'):
+                channel_info['logo'] = f"{BASE_URL}{channel_info['logo']}"
+            
             channels.append(channel_info)
         except Exception as e:
-            logging.warning(f"Error processing channel {channel.get('id')}: {e}")
+            logging.warning(f"Error processing channel {channel.get('channelId')}: {e}")
     
     logging.info(f"Found {len(channels)} channels")
     return channels
 
-def get_epg_data(channel_id, days=EPG_DAYS):
+def get_epg_data(channel_id, hours=EPG_HOURS):
     """Fetch EPG data for a specific channel."""
-    end_time = datetime.utcnow() + timedelta(days=days)
+    end_time = datetime.utcnow() + timedelta(hours=hours)
     start_time = datetime.utcnow()
     
     params = {
         'channelId': channel_id,
         'startTime': start_time.isoformat() + 'Z',
-        'endTime': end_time.isoformat() + 'Z'
+        'endTime': end_time.isoformat() + 'Z',
+        'limit': 100  # Adjust based on API limits
     }
     
-    url = f"{BASE_URL}/v1/epg"
-    data = fetch_data(url, params=params)
+    epg_url = f"{API_BASE_URL}/epg"
+    data = fetch_data(epg_url, params=params)
     
     if not data or 'programs' not in data:
         logging.warning(f"No EPG data found for channel {channel_id}")
@@ -144,7 +156,7 @@ def generate_m3u_playlist(channels):
 
 def generate_epg_xml(channels):
     """Generate XMLTV EPG data."""
-    tv = ET.Element('tv')
+    tv = ET.Element('tv', {'generator-info-name': 'LG Channels EPG Generator', 'generator-info-url': 'https://github.com/yourusername/lgchannels-epg'})
     
     # Add channel information
     for channel in channels:
@@ -157,24 +169,27 @@ def generate_epg_xml(channels):
     for channel in channels:
         programs = get_epg_data(channel['id'])
         for program in programs:
-            program_elem = ET.SubElement(tv, 'programme', {
-                'channel': str(channel['id']),
-                'start': format_time(program.get('startTime')),
-                'stop': format_time(program.get('endTime'))
-            })
-            
-            ET.SubElement(program_elem, 'title').text = program.get('title', 'Unknown')
-            
-            if 'description' in program:
-                ET.SubElement(program_elem, 'desc').text = program['description']
-            
-            if 'genre' in program:
-                genre = program['genre']
-                if isinstance(genre, list):
-                    for g in genre:
-                        ET.SubElement(program_elem, 'category').text = g
-                else:
-                    ET.SubElement(program_elem, 'category').text = genre
+            try:
+                program_elem = ET.SubElement(tv, 'programme', {
+                    'channel': str(channel['id']),
+                    'start': format_time(program.get('startTime')),
+                    'stop': format_time(program.get('endTime'))
+                })
+                
+                ET.SubElement(program_elem, 'title').text = program.get('title', 'Unknown')
+                
+                if 'description' in program:
+                    ET.SubElement(program_elem, 'desc').text = program['description']
+                
+                if 'genre' in program:
+                    genre = program['genre']
+                    if isinstance(genre, list):
+                        for g in genre:
+                            ET.SubElement(program_elem, 'category').text = g
+                    else:
+                        ET.SubElement(program_elem, 'category').text = genre
+            except Exception as e:
+                logging.warning(f"Error processing program for channel {channel['id']}: {e}")
     
     return ET.ElementTree(tv)
 
@@ -185,21 +200,26 @@ def format_time(time_str):
     try:
         dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
         return dt.strftime('%Y%m%d%H%M%S %z')
-    except (ValueError, AttributeError):
+    except (ValueError, AttributeError) as e:
+        logging.warning(f"Error formatting time '{time_str}': {e}")
         return ""
 
 def save_gzipped_xml(tree, filepath):
     """Save XML tree to a gzipped file."""
     try:
-        xml_string = '<?xml version="1.0" encoding="UTF-8"?>\n'
+        # Create XML declaration and DOCTYPE
+        xml_declaration = '<?xml version="1.0" encoding="UTF-8"?>\n'
         # Add DOCTYPE declaration
-        xml_string += '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
-        # Convert the XML tree to a string and append it
-        xml_string += ET.tostring(tree.getroot(), encoding='unicode', method='xml')
+        doctype = '<!DOCTYPE tv SYSTEM "xmltv.dtd">\n'
+        # Convert the XML tree to a string
+        xml_string = ET.tostring(tree.getroot(), encoding='unicode', method='xml')
+        
+        # Combine everything
+        full_xml = xml_declaration + doctype + xml_string
         
         # Write to gzipped file
         with gzip.open(filepath, 'wb') as f:
-            f.write(xml_string.encode('utf-8'))
+            f.write(full_xml.encode('utf-8'))
         
         logging.info(f"EPG XML saved to {filepath}")
     except Exception as e:
