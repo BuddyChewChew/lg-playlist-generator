@@ -2,11 +2,10 @@ name: LG Channels M3U/EPG Generator
 
 on:
   schedule:
-    # Run every 6 hours to keep EPG data fresh
     - cron: '0 */6 * * *'
-  workflow_dispatch:  # Allow manual triggers
+  workflow_dispatch:
   push:
-    branches: [ main ]
+    branches: [main]
     paths:
       - 'lgchannels_generator.py'
       - '.github/workflows/lgchannels.yml'
@@ -36,10 +35,6 @@ jobs:
     
     - name: Run LG Channels M3U/EPG Generator
       run: python lgchannels_generator.py
-      env:
-        # Add any required environment variables here
-        # For example, if you need an API key:
-        # LGCHANNELS_API_KEY: ${{ secrets.LGCHANNELS_API_KEY }}
     
     - name: Commit and push changes
       run: |
@@ -49,10 +44,3 @@ jobs:
         git diff --quiet && git diff --staged --quiet || (git commit -m "Update LG Channels M3U and EPG data" && git push)
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Upload M3U and EPG files
-      uses: actions/upload-artifact@v3
-      with:
-        name: lgchannels-playlist
-        path: lgchannels_playlist/
-        retention-days: 5
