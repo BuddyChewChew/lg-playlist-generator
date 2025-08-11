@@ -1,0 +1,58 @@
+name: LG Channels M3U/EPG Generator
+
+on:
+  schedule:
+    # Run every 6 hours to keep EPG data fresh
+    - cron: '0 */6 * * *'
+  workflow_dispatch:  # Allow manual triggers
+  push:
+    branches: [ main ]
+    paths:
+      - 'lgchannels_generator.py'
+      - '.github/workflows/lgchannels.yml'
+
+jobs:
+  generate-m3u-epg:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install requests
+    
+    - name: Create output directory
+      run: mkdir -p lgchannels_playlist
+    
+    - name: Run LG Channels M3U/EPG Generator
+      run: python lgchannels_generator.py
+      env:
+        # Add any required environment variables here
+        # For example, if you need an API key:
+        # LGCHANNELS_API_KEY: ${{ secrets.LGCHANNELS_API_KEY }}
+    
+    - name: Commit and push changes
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add lgchannels_playlist/
+        git diff --quiet && git diff --staged --quiet || (git commit -m "Update LG Channels M3U and EPG data" && git push)
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Upload M3U and EPG files
+      uses: actions/upload-artifact@v3
+      with:
+        name: lgchannels-playlist
+        path: lgchannels_playlist/
+        retention-days: 5
