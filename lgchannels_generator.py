@@ -11,20 +11,20 @@ import time
 import sys
 
 # --- Configuration ---
-BASE_URL = "https://us.lgchannels.com"
-API_BASE_URL = f"{BASE_URL}/api/v1"
+BASE_URL = "https://channel-lineup.lgchannels.com"
 DEFAULT_HEADERS = {
     'Accept': 'application/json, text/plain, */*',
     'Accept-Encoding': 'gzip, deflate, br, zstd',
     'Accept-Language': 'en-US,en;q=0.5',
     'Connection': 'keep-alive',
-    'Host': 'us.lgchannels.com',
+    'Host': 'channel-lineup.lgchannels.com',
     'Origin': 'https://lgchannels.com',
     'Referer': 'https://lgchannels.com/',
     'Sec-Fetch-Dest': 'empty',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Site': 'same-site',
-    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0'
+    'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:141.0) Gecko/20100101 Firefox/141.0',
+    'X-Requested-With': 'XMLHttpRequest'
 }
 
 # --- Output Settings ---
@@ -71,6 +71,7 @@ def fetch_data(url, params=None, headers=None, retries=2):
             if attempt == retries:
                 logging.error(f"Failed to fetch {url} after {retries + 1} attempts: {e}")
                 if hasattr(e, 'response') and e.response is not None:
+                    logging.error(f"Response status: {e.response.status_code}")
                     logging.error(f"Response content: {e.response.text[:500]}")
                 return None
             time.sleep(1 * (attempt + 1))
@@ -80,19 +81,19 @@ def get_channels():
     """Fetch the list of channels from LG Channels API."""
     logging.info("Fetching channel list...")
     
-    # First, get the channel lineup
-    lineup_url = f"{API_BASE_URL}/lineup"
+    # Try to get the channel lineup from the main page
+    lineup_url = f"{BASE_URL}/api/channels"
     data = fetch_data(lineup_url)
     
-    if not data or 'channels' not in data:
+    if not data or not isinstance(data, list):
         logging.error("Failed to fetch or parse channel list")
         return []
     
     channels = []
-    for channel in data['channels']:
+    for channel in data:
         try:
             channel_info = {
-                'id': channel.get('channelId'),
+                'id': channel.get('id'),
                 'name': channel.get('name', 'Unknown'),
                 'number': channel.get('channelNumber', '0'),
                 'logo': channel.get('logoUrl', ''),
@@ -111,7 +112,7 @@ def get_channels():
             
             channels.append(channel_info)
         except Exception as e:
-            logging.warning(f"Error processing channel {channel.get('channelId')}: {e}")
+            logging.warning(f"Error processing channel {channel.get('id')}: {e}")
     
     logging.info(f"Found {len(channels)} channels")
     return channels
@@ -121,17 +122,15 @@ def get_epg_data(channel_id, hours=EPG_HOURS):
     end_time = datetime.utcnow() + timedelta(hours=hours)
     start_time = datetime.utcnow()
     
+    epg_url = f"{BASE_URL}/api/epg/{channel_id}"
     params = {
-        'channelId': channel_id,
         'startTime': start_time.isoformat() + 'Z',
-        'endTime': end_time.isoformat() + 'Z',
-        'limit': 100  # Adjust based on API limits
+        'endTime': end_time.isoformat() + 'Z'
     }
     
-    epg_url = f"{API_BASE_URL}/epg"
     data = fetch_data(epg_url, params=params)
     
-    if not data or 'programs' not in data:
+    if not data or not isinstance(data, dict) or 'programs' not in data:
         logging.warning(f"No EPG data found for channel {channel_id}")
         return []
     
@@ -147,16 +146,21 @@ def generate_m3u_playlist(channels):
             
         m3u_content += f"#EXTINF:-1 tvg-id=\"{channel['id']}\" "
         m3u_content += f"tvg-name=\"{channel['name']}\" "
-        m3u_content += f"tvg-logo=\"{channel['logo']}\" "
-        m3u_content += f"group-title=\"{','.join(channel.get('categories', []))}\","
-        m3u_content += f"{channel['name']}\n"
+        if channel.get('logo'):
+            m3u_content += f"tvg-logo=\"{channel['logo']}\" "
+        if channel.get('categories'):
+            m3u_content += f"group-title=\"{','.join(channel['categories'])}\" "
+        m3u_content += f",{channel['name']}\n"
         m3u_content += f"{channel['stream_url']}\n"
     
     return m3u_content
 
 def generate_epg_xml(channels):
     """Generate XMLTV EPG data."""
-    tv = ET.Element('tv', {'generator-info-name': 'LG Channels EPG Generator', 'generator-info-url': 'https://github.com/yourusername/lgchannels-epg'})
+    tv = ET.Element('tv', {
+        'generator-info-name': 'LG Channels EPG Generator',
+        'generator-info-url': 'https://github.com/yourusername/lgchannels-epg'
+    })
     
     # Add channel information
     for channel in channels:
@@ -198,7 +202,10 @@ def format_time(time_str):
     if not time_str:
         return ""
     try:
-        dt = datetime.fromisoformat(time_str.replace('Z', '+00:00'))
+        # Remove timezone if present and add Z for UTC
+        if 'Z' in time_str:
+            time_str = time_str.replace('Z', '+00:00')
+        dt = datetime.fromisoformat(time_str)
         return dt.strftime('%Y%m%d%H%M%S %z')
     except (ValueError, AttributeError) as e:
         logging.warning(f"Error formatting time '{time_str}': {e}")
