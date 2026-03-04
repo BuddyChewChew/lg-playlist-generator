@@ -1,7 +1,7 @@
 name: Update LG EPG
 on:
   schedule:
-    - cron: '0 0 * * *' # Run daily at midnight
+    - cron: '0 */12 * * *'
   workflow_dispatch:
 
 jobs:
@@ -22,10 +22,19 @@ jobs:
       - name: Generate LG EPG
         run: python lg_epg.py
 
+      - name: Verify File Creation
+        run: ls -lh lg_channels.xml || echo "FILE NOT FOUND"
+
       - name: Commit and Push
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          git add lg_channels.xml
-          git commit -m "Update LG Channels EPG" || exit 0
-          git push
+          # Only try to add if the file exists to avoid the 128 error
+          if [ -f lg_channels.xml ]; then
+            git add lg_channels.xml
+            git commit -m "Update LG Channels EPG" || exit 0
+            git push
+          else
+            echo "Skipping git push: lg_channels.xml was not created."
+            exit 1
+          fi
