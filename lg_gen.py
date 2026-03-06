@@ -10,10 +10,10 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 M3U_FILENAME = "lg_channels.m3u"
 EPG_FILENAME = "lg_channels_epg.xml"
 
-# Set your GitHub Username here
+# Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub handle
 GITHUB_USERNAME = "YOUR_GITHUB_USERNAME"
-# Corrected Repo Name to 'lg'
-GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/lg/main/{EPG_FILENAME}"
+REPO_NAME = "lg"
+GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
 
 headers = {
     'user-agent': USER_AGENT,
@@ -32,9 +32,10 @@ def fetch_data():
 
 def generate_files(data):
     if not data or 'categories' not in data:
+        print("No valid data received from API.")
         return
 
-    # Header with the EPG link pointing to the 'lg' repo
+    # Header with the EPG link as requested for the 'lg' repo
     m3u_lines = [f'#EXTM3U x-tvg-url="{GITHUB_RAW_URL}"']
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<tv>']
 
@@ -49,11 +50,13 @@ def generate_files(data):
                 continue
             
             chan_name = chan.get('channelName', 'Unknown')
+            # Clean stream URL (stripping SSAI/tracking params)
             stream_url = chan.get('mediaStaticUrl', '').split('?')[0]
             
             if not stream_url:
                 continue
 
+            # M3U Entry
             logo = ""
             if chan.get('programs'):
                 logo = chan['programs'][0].get('imageUrl', '')
@@ -61,9 +64,12 @@ def generate_files(data):
             m3u_lines.append(f'#EXTINF:-1 tvg-id="{chan_id}" tvg-name="{chan_name}" tvg-logo="{logo}" group-title="{cat_name}",{chan_name}')
             m3u_lines.append(stream_url)
 
+            # XMLTV Channel Definition
             xml_lines.append(f'  <channel id="{chan_id}">\n    <display-name>{chan_name}</display-name>\n  </channel>')
             
+            # XMLTV Program Listings
             for prog in chan.get('programs', []):
+                # Format for XMLTV: YYYYMMDDHHMMSS +0000
                 start = prog.get('startDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 end = prog.get('endDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 title = prog.get('programTitle', 'No Title').replace('&', '&amp;')
@@ -79,14 +85,16 @@ def generate_files(data):
 
     xml_lines.append('</tv>')
 
+    # Write M3U file
     with open(M3U_FILENAME, "w", encoding="utf-8") as f:
         f.write("\n".join(m3u_lines))
 
+    # Write EPG XML file
     with open(EPG_FILENAME, "w", encoding="utf-8") as f:
         f.write("\n".join(xml_lines))
 
-    print(f"Generated {M3U_FILENAME} and {EPG_FILENAME} for repo: lg")
+    print(f"Files generated successfully for repo '{REPO_NAME}': {M3U_FILENAME}, {EPG_FILENAME}")
 
 if __name__ == "__main__":
-    channel_data = fetch_data()
-    generate_files(channel_data)
+    raw_data = fetch_data()
+    generate_files(raw_data)
