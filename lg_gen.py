@@ -12,9 +12,9 @@ USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTM
 M3U_FILENAME = "lg_channels_us.m3u"
 EPG_FILENAME = "lg_channels_us.xml"
 
-# Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub handle
+# Final User and Repo Details
 GITHUB_USERNAME = "BuddyChewChew"
-REPO_NAME = "lg"
+REPO_NAME = "lg-playlist-generator"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
 
 headers = {
@@ -37,7 +37,7 @@ def generate_files(data):
         print("No valid data received from API.")
         return
 
-    # Header with the EPG link pointing to lg_channels_us.xml
+    # Header with the EPG link pointing to lg_channels_us.xml in the new repo
     m3u_lines = [f'#EXTM3U x-tvg-url="{GITHUB_RAW_URL}"']
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<tv>']
 
@@ -95,7 +95,7 @@ def generate_files(data):
     with open(EPG_FILENAME, "w", encoding="utf-8") as f:
         f.write("\n".join(xml_lines))
 
-    print(f"Files generated: {M3U_FILENAME}, {EPG_FILENAME}")
+    print(f"Files generated for {REPO_NAME}: {M3U_FILENAME}, {EPG_FILENAME}")
 
 if __name__ == "__main__":
     raw_data = fetch_data()
