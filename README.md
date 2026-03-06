@@ -1,4 +1,4 @@
-# ⭐ LG WEB Channels M3U Playlist Generator
+# ⭐ LG WEB Channel M3U Playlist Generator
 
 [![Update LG Playlist](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml/badge.svg)](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml)
 
