@@ -30,7 +30,6 @@ jobs:
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
-          # This adds everything in the playlists folder
-          git add playlists/*.m3u playlists/*.xml
-          git commit -m "Auto-update Global LG Playlists and EPGs" || exit 0
+          git add playlists/
+          git commit -m "Auto-update Global LG Playlists" || exit 0
           git push
