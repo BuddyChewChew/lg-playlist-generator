@@ -11,7 +11,7 @@ M3U_FILENAME = "lg_channels.m3u"
 EPG_FILENAME = "lg_channels_epg.xml"
 
 # Replace 'YOUR_GITHUB_USERNAME' with your actual GitHub handle
-GITHUB_USERNAME = "YOUR_GITHUB_USERNAME"
+GITHUB_USERNAME = "BuddyChewChew"
 REPO_NAME = "lg"
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
 
