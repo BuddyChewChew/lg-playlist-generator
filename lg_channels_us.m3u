@@ -1,4 +1,4 @@
-#EXTM3U x-tvg-url="https://raw.githubusercontent.com/BuddyChewChew/lg/main/lg_channels_us.xml"
+#EXTM3U x-tvg-url="https://raw.githubusercontent.com/BuddyChewChew/lg-playlist-generator/main/lg_channels_us.xml"
 #EXTINF:-1 tvg-id="foxlivenow_foxlivenow_US" tvg-name="LiveNOW from FOX" tvg-logo="https://d3bd0tgyk368z1.cloudfront.net/resized_images/FOXLIVENOW/resized_0ad0a7ba3e5b534693911432e4b661dc0bd4563ff79dbe394605979c00ef331d_p20209211bh8aajpg_400_225.png" group-title="News",LiveNOW from FOX
 https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg00488-foxdigital-livenowbyfox-lgus/playlist.m3u8
 #EXTINF:-1 tvg-id="newsmax_nwsmx_US" tvg-name="Newsmax N2" tvg-logo="https://d3bd0tgyk368z1.cloudfront.net/resized_images/NWSMX/resized_b214340d4f88826f911987986c3c8aaf46e9701db1cfb191df56d2ebf4df65d7_heroimagegenashx_400_225.png" group-title="News",Newsmax N2
