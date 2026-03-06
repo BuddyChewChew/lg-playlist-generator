@@ -5,24 +5,31 @@ import os
 # Configuration
 API_URL = 'https://api.lgchannels.com/api/v1.0/schedulelist'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
-
-# Directory and Filenames
 OUTPUT_DIR = "playlists"
-M3U_FILENAME = os.path.join(OUTPUT_DIR, "lg_channels_us.m3u")
-EPG_FILENAME = os.path.join(OUTPUT_DIR, "lg_channels_us.xml")
 
-# User and Repo Details
+# GitHub Details
 GITHUB_USERNAME = "BuddyChewChew"
 REPO_NAME = "lg-playlist-generator"
-GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
 
-headers = {
-    'user-agent': USER_AGENT,
-    'x-device-country': 'US',
-    'x-device-language': 'en',
-}
+# Full List of 14 Regions
+REGIONS = [
+    {'name': 'United States', 'country': 'US', 'lang': 'en', 'suffix': 'us'},
+    {'name': 'Canada', 'country': 'CA', 'lang': 'en', 'suffix': 'ca'},
+    {'name': 'United Kingdom', 'country': 'GB', 'lang': 'en', 'suffix': 'uk'},
+    {'name': 'Australia', 'country': 'AU', 'lang': 'en', 'suffix': 'au'},
+    {'name': 'Germany', 'country': 'DE', 'lang': 'de', 'suffix': 'de'},
+    {'name': 'France', 'country': 'FR', 'lang': 'fr', 'suffix': 'fr'},
+    {'name': 'Spain', 'country': 'ES', 'lang': 'es', 'suffix': 'es'},
+    {'name': 'Italy', 'country': 'IT', 'lang': 'it', 'suffix': 'it'},
+    {'name': 'Brazil', 'country': 'BR', 'lang': 'pt', 'suffix': 'br'},
+    {'name': 'Mexico', 'country': 'MX', 'lang': 'es', 'suffix': 'mx'},
+    {'name': 'South Korea', 'country': 'KR', 'lang': 'ko', 'suffix': 'kr'},
+    {'name': 'Japan', 'country': 'JP', 'lang': 'ja', 'suffix': 'jp'},
+    {'name': 'New Zealand', 'country': 'NZ', 'lang': 'en', 'suffix': 'nz'},
+    {'name': 'Singapore', 'country': 'SG', 'lang': 'en', 'suffix': 'sg'}
+]
 
-def fetch_data():
+def fetch_data(headers):
     try:
         response = requests.get(API_URL, headers=headers, timeout=30)
         response.raise_for_status()
@@ -31,15 +38,29 @@ def fetch_data():
         print(f"Error fetching data: {e}")
         return None
 
-def generate_files(data):
+def generate_region_files(region):
+    headers = {
+        'user-agent': USER_AGENT,
+        'x-device-country': region['country'],
+        'x-device-language': region['lang'],
+    }
+    
+    print(f"Processing: {region['name']}...")
+    data = fetch_data(headers)
+    
     if not data or 'categories' not in data:
+        print(f"Failed to retrieve data for {region['name']}.")
         return
 
-    # Ensure output directory exists
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
+    m_file = f"lg_channels_{region['suffix']}.m3u"
+    x_file = f"lg_channels_{region['suffix']}.xml"
+    m_path = os.path.join(OUTPUT_DIR, m_file)
+    x_path = os.path.join(OUTPUT_DIR, x_file)
+    
+    # Correct Raw URL for GitHub
+    epg_url = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/playlists/{x_file}"
 
-    m3u_lines = [f'#EXTM3U x-tvg-url="{GITHUB_RAW_URL}"']
+    m3u_lines = [f'#EXTM3U x-tvg-url="{epg_url}"']
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<tv>']
     processed_channels = set()
 
@@ -55,15 +76,18 @@ def generate_files(data):
             if not stream_url: continue
 
             logo = chan['programs'][0].get('imageUrl', '') if chan.get('programs') else ""
+            
             m3u_lines.append(f'#EXTINF:-1 tvg-id="{chan_id}" tvg-name="{chan_name}" tvg-logo="{logo}" group-title="{cat_name}",{chan_name}')
             m3u_lines.append(stream_url)
 
             xml_lines.append(f'  <channel id="{chan_id}">\n    <display-name>{chan_name}</display-name>\n  </channel>')
+            
             for prog in chan.get('programs', []):
                 start = prog.get('startDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 end = prog.get('endDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 title = prog.get('programTitle', 'No Title').replace('&', '&amp;')
                 desc = prog.get('description', '').replace('&', '&amp;')
+                
                 if start and end:
                     xml_lines.append(f'  <programme start="{start}" stop="{end}" channel="{chan_id}">')
                     xml_lines.append(f'    <title>{title}</title>\n    <desc>{desc}</desc>\n  </programme>')
@@ -72,10 +96,14 @@ def generate_files(data):
 
     xml_lines.append('</tv>')
 
-    with open(M3U_FILENAME, "w", encoding="utf-8") as f:
+    with open(m_path, "w", encoding="utf-8") as f:
         f.write("\n".join(m3u_lines))
-    with open(EPG_FILENAME, "w", encoding="utf-8") as f:
+    with open(x_path, "w", encoding="utf-8") as f:
         f.write("\n".join(xml_lines))
 
 if __name__ == "__main__":
-    generate_files(fetch_data())
+    if not os.path.exists(OUTPUT_DIR):
+        os.makedirs(OUTPUT_DIR)
+    for region in REGIONS:
+        generate_region_files(region)
+    print("All regions processed successfully.")
