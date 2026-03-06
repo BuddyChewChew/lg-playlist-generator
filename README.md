@@ -1,6 +1,6 @@
 # ⭐ LG Channels M3U Playlist Generator
 
-![Build Status](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/main.yml/badge.svg)
+[![Update LG Playlist](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml/badge.svg)](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml)
 
 This repository automatically generates M3U playlist files for LG Channels using a Python script and GitHub Actions. The playlists include embedded EPG (Electronic Program Guide) information via the `x-tvg-url` tag in the M3U header.
 
