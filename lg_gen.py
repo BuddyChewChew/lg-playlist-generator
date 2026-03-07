@@ -6,14 +6,14 @@ import os
 API_URL = 'https://api.lgchannels.com/api/v1.0/schedulelist'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 
-# Directory and Filenames
-OUTPUT_DIR = "playlists"
-M3U_FILENAME = os.path.join(OUTPUT_DIR, "lg_channels_us.m3u")
-EPG_FILENAME = os.path.join(OUTPUT_DIR, "lg_channels_us.xml")
+# Filenames (Removed playlists directory)
+M3U_FILENAME = "lg_channels_us.m3u"
+EPG_FILENAME = "lg_channels_us.xml"
 
 # User and Repo Details
 GITHUB_USERNAME = "BuddyChewChew"
 REPO_NAME = "lg-playlist-generator"
+# Corrected URL to point to root
 GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
 
 headers = {
@@ -34,10 +34,6 @@ def fetch_data():
 def generate_files(data):
     if not data or 'categories' not in data:
         return
-
-    # Ensure output directory exists
-    if not os.path.exists(OUTPUT_DIR):
-        os.makedirs(OUTPUT_DIR)
 
     m3u_lines = [f'#EXTM3U x-tvg-url="{GITHUB_RAW_URL}"']
     xml_lines = ['<?xml version="1.0" encoding="UTF-8"?>', '<tv>']
