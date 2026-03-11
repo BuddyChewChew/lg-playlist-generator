@@ -1,3 +1,5 @@
+Fork this for more languages: https://github.com/BuddyChewChew/lg-playlist-generator/issues/1#issuecomment-4041402810
+
 # ⭐ LG WEB Channel M3U Playlist Generator
 
 [![Update LG Playlist](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml/badge.svg)](https://github.com/BuddyChewChew/lg-playlist-generator/actions/workflows/update_lg.yml)
