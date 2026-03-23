@@ -7,8 +7,8 @@ API_URL = 'https://api.lgchannels.com/api/v1.0/schedulelist'
 USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
 
 # Filenames (Removed playlists directory)
-M3U_FILENAME = "lg_channels_us.m3u"
-EPG_FILENAME = "lg_channels_us.xml"
+M3U_FILENAME = "lg_channels_mx.m3u"
+EPG_FILENAME = "lg_channels_mx.xml"
 
 # User and Repo Details
 GITHUB_USERNAME = "BuddyChewChew"
@@ -18,8 +18,8 @@ GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAM
 
 headers = {
     'user-agent': USER_AGENT,
-    'x-device-country': 'US',
-    'x-device-language': 'en',
+    'x-device-country': 'MX',
+    'x-device-language': 'es',
 }
 
 def fetch_data():
