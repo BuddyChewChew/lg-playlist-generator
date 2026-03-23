@@ -14,7 +14,7 @@ EPG_FILENAME = "lg_channels_mx.xml"
 GITHUB_USERNAME = "BuddyChewChew"
 REPO_NAME = "lg-playlist-generator"
 # Corrected URL to point to root
-GITHUB_RAW_URL = f"https://raw.githubusercontent.com/{GITHUB_USERNAME}/{REPO_NAME}/main/{EPG_FILENAME}"
+GITHUB_RAW_URL = f"https://raw.githubusercontent.com/s-digweed/{REPO_NAME}/main/{EPG_FILENAME}"
 
 headers = {
     'user-agent': USER_AGENT,
