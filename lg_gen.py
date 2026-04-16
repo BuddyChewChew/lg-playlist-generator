@@ -59,7 +59,8 @@ def generate_files(data):
                 start = prog.get('startDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 end = prog.get('endDateTime', '').replace('-', '').replace(':', '').replace('T', '').replace('Z', ' +0000')
                 title = prog.get('programTitle', 'No Title').replace('&', '&amp;')
-                desc = prog.get('description', '').replace('&', '&amp;')
+                # Fixed AttributeError: 'NoneType' object has no attribute 'replace' [cite: 15]
+                desc = (prog.get('description') or '').replace('&', '&amp;')
                 if start and end:
                     xml_lines.append(f'  <programme start="{start}" stop="{end}" channel="{chan_id}">')
                     xml_lines.append(f'    <title>{title}</title>\n    <desc>{desc}</desc>\n  </programme>')
