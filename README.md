@@ -34,7 +34,7 @@ This repository automatically generates M3U playlist files for LG Channels using
 The generated M3U files are located in the [`playlists/`](https://github.com/BuddyChewChew/lg-playlist-generator/tree/main/playlists) directory.
 
 **Direct URL Format:**
-`https://raw.githubusercontent.com/BuddyChewChew/lg-playlist-generator/main/playlists/lg_channels_us.m3u`
+`https://raw.githubusercontent.com/BuddyChewChew/lg-playlist-generator/refs/heads/main/lg_channels_us.m3u`
 
 **To get the URL manually:**
 1. Navigate to the `playlists/` folder.
