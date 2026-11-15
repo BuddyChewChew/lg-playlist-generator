@@ -1,0 +1,69 @@
+name: LG Channels EPG Export
+
+on:
+  schedule:
+    # Daily at 02:00 UTC
+    - cron: '0 2 * * *'
+  workflow_dispatch:  # manual trigger from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  export-epg:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run EPG exporter
+        run: |
+          python lgchannelsepgmaker.py \
+            --all \
+            --output-dir LG_Channels_EPG_output \
+            --workers 4 \
+            --timeout 30
+
+      - name: Combine and compress all EPG files (all.xml.gz only)
+        run: |
+          python3 - <<'EOF'
+import gzip
+import glob
+import os
+from xml.etree import ElementTree as ET
+
+output_dir = 'LG_Channels_EPG_output'
+files = sorted(glob.glob(os.path.join(output_dir, 'LG_Channels_*.xml')))
+if not files:
+    raise SystemExit('No LG_Channels_*.xml files found to combine.')
+
+root = ET.Element('tv', {'generator-info-name': 'LG Channels EPG (Combined)'})
+for f in files:
+    tree = ET.parse(f)
+    for child in tree.getroot():
+        root.append(child)
+
+gz_path = os.path.join(output_dir, 'all.xml.gz')
+with gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
+    f_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
+    ET.ElementTree(root).write(f_out, encoding='utf-8', xml_declaration=False)
+
+print(f'Combined {len(files)} country files into all.xml.gz (no uncompressed copy kept)')
+EOF
+
+      - name: Commit compressed EPG and session files
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add LG_Channels_EPG_output/all.xml.gz LG_Channels_EPG_output/.lg_session_*.json
+          git commit -m "chore: update LG EPG export (run ${{ github.run_id }})" || echo "No changes to commit"
+          git push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
