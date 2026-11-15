@@ -60,11 +60,11 @@ jobs:
           print(f'Combined {len(files)} country files into all.xml.gz')
           EOF
 
-      - name: Commit compressed EPG and session files
+      - name: Commit all EPG files (per-region + combined)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add LG_Channels_EPG_output/all.xml.gz LG_Channels_EPG_output/.lg_session_*.json
+          git add LG_Channels_EPG_output/LG_Channels_*.xml LG_Channels_EPG_output/all.xml.gz LG_Channels_EPG_output/.lg_session_*.json
           git commit -m "chore: update LG EPG export (run ${{ github.run_id }})" || echo "No changes to commit"
           git push
         env:
