@@ -1,0 +1,38 @@
+{
+  "headers": {
+    "X-Device-ID": "aqrZHv0gBUDIb68TanQ6d/KUPUSJzZYnnsJ4W+66/DYNSbo3WV6AKliUE7M2VvPhxMH8o5uCOvq6FTxjvxrZzMynM3a7fwu6hc616w8lljERNAANMWISNY/tP9y714l9",
+    "X-Device-Model": "HE_DTV_W26P_AFADATAA",
+    "X-Device-Country": "SG",
+    "X-Device-Language": "en-SG",
+    "X-Device-Locale": "en-SG",
+    "X-Device-Country-Group": "AJ",
+    "X-Device-Product": "webOSTV 26",
+    "X-Device-Platform": "W26P",
+    "X-Device-SDK-VERSION": "11.2.0",
+    "X-Device-Netcast-Platform-Version": "11.2.0",
+    "X-Device-Brand": "LG",
+    "X-Device-Sales-Model": "43QNED80B6B.AEUJ6JP",
+    "X-Device-Type": "T01",
+    "X-Device-Eco-Info": "1",
+    "X-Caller-Id": "com.webos.service.sdx",
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "User-Agent": "LG SMARTTV",
+    "X-Device-Eula": "customAdAllowed,additional3Allowed,additionalDataAllowed,networkAllowed,chpAllowed,marketingOnAllowed,voice2Allowed,acrAdAllowed,generalTermsAllowed,shoppingOnAllowed,voiceAllowed,acrOnAllowed",
+    "X-Device-FCK": "-1",
+    "X-Device-ContentsQA-Flag": "N",
+    "X-Device-Remote-Flag": "N",
+    "X-Device-Publish-Flag": "N"
+  },
+  "authentication": {
+    "refreshToken": "600eb7a6-cdb0-40b9-9b66-440f078fdbc5:1795388117",
+    "deviceUniqueID": "8c2f1866ab3e561ecbf18d9ebaa754d69db0973b14bb601344e43cae2b56f6277888ff20c6b419ea21cb3ea69f7fe7d93726b1ad027e1765cbd1a195e5b26ac4",
+    "accessTokenDuration": 6900000,
+    "refreshTokenDuration": 604500000,
+    "deviceSecret": "1sv86EZAsBihtLWubZM2CJwvFWvRYzjY+bXKTSpowNBoucBrzbNy7ddvOJyFYTxEzTlTMfLSMAYD5nI8YR9TQ24znaZOTaN1NkDycOC/cYN8LTyTf3LthJDDMyAe3yO0uldEVlYB9fcc1MLsnqul8A==",
+    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJraWMudHYud2lzZWxnLmNvbSIsImF1ZCI6WyJ3aXNlbGcuY29tIl0sImlhdCI6MTc5NDc4MzMxNywiZXhwIjoxNzk0NzkwNTE3LCJtYWNBZGRyZXNzIjoiOGMyZjE4NjZhYjNlNTYxZWNiZjE4ZDllYmFhNzU0ZDY5ZGIwOTczYjE0YmI2MDEzNDRlNDNjYWUyYjU2ZjYyNzc4ODhmZjIwYzZiNDE5ZWEyMWNiM2VhNjlmN2ZlN2Q5MzcyNmIxYWQwMjdlMTc2NWNiZDFhMTk1ZTViMjZhYzQifQ.Y0PKcoMJDOyOEdyubPVAI-kX6TBBBXugSTyRuORt2_Y"
+  },
+  "cluster": "KIC",
+  "country": "SG",
+  "saved_at_unix": 1794783317.1092756
+}

@@ -1,0 +1,38 @@
+{
+  "headers": {
+    "X-Device-ID": "aqrZHv0gBUDIb68TanQ6d/KUPUSJzZYnnsJ4W+66/DYNSbo3WV6AKliUE7M2VvPhxMH8o5uCOvq6FTxjvxrZzMynM3a7fwu6hc616w8lljERNAANMWISNY/tP9y714l9",
+    "X-Device-Model": "HE_DTV_W26P_AFADATAA",
+    "X-Device-Country": "AR",
+    "X-Device-Language": "en-AR",
+    "X-Device-Locale": "en-AR",
+    "X-Device-Country-Group": "AR",
+    "X-Device-Product": "webOSTV 26",
+    "X-Device-Platform": "W26P",
+    "X-Device-SDK-VERSION": "11.2.0",
+    "X-Device-Netcast-Platform-Version": "11.2.0",
+    "X-Device-Brand": "LG",
+    "X-Device-Sales-Model": "43QNED80B6B.AEUJ6JP",
+    "X-Device-Type": "T01",
+    "X-Device-Eco-Info": "1",
+    "X-Caller-Id": "com.webos.service.sdx",
+    "Accept": "application/json",
+    "Content-Type": "application/x-www-form-urlencoded",
+    "User-Agent": "LG SMARTTV",
+    "X-Device-Eula": "customAdAllowed,additional3Allowed,additionalDataAllowed,networkAllowed,chpAllowed,marketingOnAllowed,voice2Allowed,acrAdAllowed,generalTermsAllowed,shoppingOnAllowed,voiceAllowed,acrOnAllowed",
+    "X-Device-FCK": "-1",
+    "X-Device-ContentsQA-Flag": "N",
+    "X-Device-Remote-Flag": "N",
+    "X-Device-Publish-Flag": "N"
+  },
+  "authentication": {
+    "accessTokenDuration": 6900000,
+    "refreshTokenDuration": 604500000,
+    "deviceSecret": "SY46ulOq7pRVbEoAj+MsQdggv6nRUDrs3PqaJ9UvqHQFdm0X/sEc2xLIITgzTsxvlnrj0H9+Fj5n+4e4N7Pm4OjAj4QinfMLcQpApiOfWgCA2l25y+Yh7w1umFKZB+292O+OLuHfgT4gEKzRp6woGw==",
+    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJhaWMudHYud2lzZWxnLmNvbSIsImF1ZCI6WyJ3aXNlbGcuY29tIl0sImlhdCI6MTc5NDc4MzMwMywiZXhwIjoxNzk0NzkwNTAzLCJtYWNBZGRyZXNzIjoiOGMyZjE4NjZhYjNlNTYxZWNiZjE4ZDllYmFhNzU0ZDY5ZGIwOTczYjE0YmI2MDEzNDRlNDNjYWUyYjU2ZjYyNzc4ODhmZjIwYzZiNDE5ZWEyMWNiM2VhNjlmN2ZlN2Q5MzcyNmIxYWQwMjdlMTc2NWNiZDFhMTk1ZTViMjZhYzQifQ.L_bYgKlu9_20dtfLESXKvRXhcaGFE0VEv1EiNbFFaZM",
+    "refreshToken": "3079f5c8-4f45-4ba9-9ee3-187fab472cd2:1795388103",
+    "deviceUniqueID": "8c2f1866ab3e561ecbf18d9ebaa754d69db0973b14bb601344e43cae2b56f6277888ff20c6b419ea21cb3ea69f7fe7d93726b1ad027e1765cbd1a195e5b26ac4"
+  },
+  "cluster": "AIC",
+  "country": "AR",
+  "saved_at_unix": 1794783303.972308
+}
