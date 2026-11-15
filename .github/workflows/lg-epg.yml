@@ -33,29 +33,29 @@ jobs:
       - name: Combine and compress all EPG files (all.xml.gz only)
         run: |
           python3 - <<'EOF'
-import gzip
-import glob
-import os
-from xml.etree import ElementTree as ET
+          import gzip
+          import glob
+          import os
+          from xml.etree import ElementTree as ET
 
-output_dir = 'LG_Channels_EPG_output'
-files = sorted(glob.glob(os.path.join(output_dir, 'LG_Channels_*.xml')))
-if not files:
-    raise SystemExit('No LG_Channels_*.xml files found to combine.')
+          output_dir = 'LG_Channels_EPG_output'
+          files = sorted(glob.glob(os.path.join(output_dir, 'LG_Channels_*.xml')))
+          if not files:
+              raise SystemExit('No LG_Channels_*.xml files found to combine.')
 
-root = ET.Element('tv', {'generator-info-name': 'LG Channels EPG (Combined)'})
-for f in files:
-    tree = ET.parse(f)
-    for child in tree.getroot():
-        root.append(child)
+          root = ET.Element('tv', {'generator-info-name': 'LG Channels EPG (Combined)'})
+          for f in files:
+              tree = ET.parse(f)
+              for child in tree.getroot():
+                  root.append(child)
 
-gz_path = os.path.join(output_dir, 'all.xml.gz')
-with gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
-    f_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
-    ET.ElementTree(root).write(f_out, encoding='utf-8', xml_declaration=False)
+          gz_path = os.path.join(output_dir, 'all.xml.gz')
+          with gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
+              f_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
+              ET.ElementTree(root).write(f_out, encoding='utf-8', xml_declaration=False)
 
-print(f'Combined {len(files)} country files into all.xml.gz')
-EOF
+          print(f'Combined {len(files)} country files into all.xml.gz')
+          EOF
 
       - name: Commit compressed EPG and session files
         run: |
