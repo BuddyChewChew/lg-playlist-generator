@@ -31,7 +31,9 @@ This repository automatically generates M3U playlist files for LG Channels using
 
 ## ▶️ Other Playlist Provided by (apsattv.com)
 
-EPG: https://github.com/BuddyChewChew/lg-playlist-generator/raw/refs/heads/main/LG_Channels_EPG_output/all.xml.gz
+All-In-One EPG: https://github.com/BuddyChewChew/lg-playlist-generator/raw/refs/heads/main/LG_Channels_EPG_output/all.xml.gz
+
+Or single region .xml files. https://github.com/BuddyChewChew/lg-playlist-generator/tree/main/LG_Channels_EPG_output
 
 ## LG Channels Playlists ( Updated 1/10/26)
 
