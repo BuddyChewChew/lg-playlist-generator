@@ -22,6 +22,9 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Create output directory
+        run: mkdir -p LG_Channels_EPG_output
+
       - name: Run EPG exporter
         run: |
           python lgchannelsepgmaker.py \
