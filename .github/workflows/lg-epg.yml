@@ -2,9 +2,8 @@ name: LG Channels EPG Export
 
 on:
   schedule:
-    # Daily at 02:00 UTC
-    - cron: '0 2 * * *'
-  workflow_dispatch:  # manual trigger from the Actions tab
+    - cron: '0 2 * * *'   # daily 02:00 UTC
+  workflow_dispatch:
 
 permissions:
   contents: write
@@ -55,7 +54,7 @@ with gzip.open(gz_path, 'wb', compresslevel=9) as f_out:
     f_out.write(b'<?xml version="1.0" encoding="UTF-8"?>\n')
     ET.ElementTree(root).write(f_out, encoding='utf-8', xml_declaration=False)
 
-print(f'Combined {len(files)} country files into all.xml.gz (no uncompressed copy kept)')
+print(f'Combined {len(files)} country files into all.xml.gz')
 EOF
 
       - name: Commit compressed EPG and session files
