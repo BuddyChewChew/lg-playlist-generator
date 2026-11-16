@@ -29,109 +29,13 @@ This repository automatically generates M3U playlist files for LG Channels using
 
 ---
 
-## ▶️ Other Playlist Provided by (apsattv.com)
+## ▶️ EPG Script #2
 
-All-In-One EPG: https://github.com/BuddyChewChew/lg-playlist-generator/raw/refs/heads/main/LG_Channels_EPG_output/all.xml.gz
+All-In-One EPG: https://raw.githubusercontent.com/BuddyChewChew/lg-playlist-generator/refs/heads/main/LG_Channels_EPG_output/LG_Channels/all.xml.gz
 
 Or single region .xml files. https://github.com/BuddyChewChew/lg-playlist-generator/tree/main/LG_Channels_EPG_output
 
-## LG Channels Playlists ( Updated 1/10/26)
 
-LG Channels AE
-https://www.apsattv.com/aelg.m3u
-
-LG Channels AR
-https://www.apsattv.com/arlg.m3u
-
-LG Channels AT
-https://www.apsattv.com/atlg.m3u
-
-LG Channels AU
-https://www.apsattv.com/aulg.m3u
-
-LG Channels BE
-https://www.apsattv.com/belg.m3u
-
-LG Channels BR
-https://www.apsattv.com/brlg.m3u
-
-LG Channels CA
-https://www.apsattv.com/calg.m3u
-
-LG Channels CH
-https://www.apsattv.com/chlg.m3u
-
-LG Channels CL
-https://www.apsattv.com/cllg.m3u
-
-LG Channels CO
-https://www.apsattv.com/colg.m3u
-
-LG Channels DE
-https://www.apsattv.com/delg.m3u
-
-LG Channels DK
-https://www.apsattv.com/dklg.m3u
-
-LG Channels ES
-https://www.apsattv.com/eslg.m3u
-
-LG Channels FI
-https://www.apsattv.com/filg.m3u
-
-LG Channels FR
-https://www.apsattv.com/frlg.m3u
-
-LG Channels GB
-https://www.apsattv.com/gblg.m3u
-
-LG Channels IE
-https://www.apsattv.com/ielg.m3u
-
-LG Channels IN
-https://www.apsattv.com/inlg.m3u
-
-LG Channels IT
-https://www.apsattv.com/itlg.m3u
-
-LG Channels JP
-https://www.apsattv.com/jplg.m3u
-
-LG Channels KR
-https://www.apsattv.com/krlg.m3u
-
-LG Channels LU
-https://www.apsattv.com/lulg.m3u
-
-LG Channels MX
-https://www.apsattv.com/mxlg.m3u
-
-LG Channels NL
-https://www.apsattv.com/nllg.m3u
-
-LG Channels NO
-https://www.apsattv.com/nolg.m3u
-
-LG Channels NZ
-https://www.apsattv.com/nzlg.m3u
-
-LG Channels PE
-https://www.apsattv.com/pelg.m3u
-
-LG Channels PT
-https://www.apsattv.com/ptlg.m3u
-
-LG Channels PL
-https://www.apsattv.com/pllg.m3u
-
-LG Channels SG
-https://www.apsattv.com/sglg.m3u
-
-LG Channels SE
-https://www.apsattv.com/selg.m3u
-
-LG Channels US
-https://www.apsattv.com/uslg.m3u
 
 ## ▶️ Disclaimer
 
