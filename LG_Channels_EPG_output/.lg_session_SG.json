@@ -25,14 +25,14 @@
     "X-Device-Publish-Flag": "N"
   },
   "authentication": {
-    "refreshToken": "395424bc-04a8-41bc-98cb-a70e8f0dc16c:1796033342",
+    "refreshToken": "efb1414f-b681-43b9-b6b3-5908b6c4ea7d:1796126099",
     "deviceUniqueID": "8c2f1866ab3e561ecbf18d9ebaa754d69db0973b14bb601344e43cae2b56f6277888ff20c6b419ea21cb3ea69f7fe7d93726b1ad027e1765cbd1a195e5b26ac4",
     "accessTokenDuration": 6900000,
     "refreshTokenDuration": 604500000,
-    "deviceSecret": "hTCRSqyK6QxcIUr0U15VqUv3juEwVg9fi3iz/gCXUYyHZHh9zC/yN/Vqt5+ECNx640noUd9yu9roSA5NGp4Q0pQcn8HX+HSvbQmfNm4nQ44lmX5mf3Iz2/Qc+HZ48TbmcYFEq+YxfjcZ4gYGZ+2cDA==",
-    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJraWMudHYud2lzZWxnLmNvbSIsImF1ZCI6WyJ3aXNlbGcuY29tIl0sImlhdCI6MTc5NTQyODU0MiwiZXhwIjoxNzk1NDM1NzQyLCJtYWNBZGRyZXNzIjoiOGMyZjE4NjZhYjNlNTYxZWNiZjE4ZDllYmFhNzU0ZDY5ZGIwOTczYjE0YmI2MDEzNDRlNDNjYWUyYjU2ZjYyNzc4ODhmZjIwYzZiNDE5ZWEyMWNiM2VhNjlmN2ZlN2Q5MzcyNmIxYWQwMjdlMTc2NWNiZDFhMTk1ZTViMjZhYzQifQ.EPwGN5caFEHd-mhbULQ8Au3aXQFEjnf87BOTO7XrZFo"
+    "deviceSecret": "3bej52tzaOMgpQ+cwx4G1xmEGRc4M2L9hSM1fSzk00mZEhBpNdZAxjDlBAbDtwqTcAeObqo9EQXBTktR8X23sOixv6XDwBkZKtf0gThFvHMSQ5eSaICjCY6XJRBjnuxEdtORYyF05s2y8Fq1Ps0xGg==",
+    "accessToken": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJraWMudHYud2lzZWxnLmNvbSIsImF1ZCI6WyJ3aXNlbGcuY29tIl0sImlhdCI6MTc5NTUyMTI5OSwiZXhwIjoxNzk1NTI4NDk5LCJtYWNBZGRyZXNzIjoiOGMyZjE4NjZhYjNlNTYxZWNiZjE4ZDllYmFhNzU0ZDY5ZGIwOTczYjE0YmI2MDEzNDRlNDNjYWUyYjU2ZjYyNzc4ODhmZjIwYzZiNDE5ZWEyMWNiM2VhNjlmN2ZlN2Q5MzcyNmIxYWQwMjdlMTc2NWNiZDFhMTk1ZTViMjZhYzQifQ.jqXR92y6aWhgZnNDTBgssOgDi34c1IlWebAbQMpYcvk"
   },
   "cluster": "KIC",
   "country": "SG",
-  "saved_at_unix": 1795428542.9795947
+  "saved_at_unix": 1795521299.7531323
 }
